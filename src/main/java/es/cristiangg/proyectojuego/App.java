@@ -1,16 +1,21 @@
 package es.cristiangg.proyectojuego;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 public class App extends Application {
@@ -18,6 +23,24 @@ public class App extends Application {
     //posiciones de la nave
     double posX=230;
     double posY =500;
+    
+    //movimiento nave
+    int velocidad = 0;
+    
+    int imagenY= 0;
+    int imagen2Y =689;
+    
+    //dimensiones de pantalla
+    final int SCENE_TAM_X = 600;
+    final int SCENE_TAM_Y = 400;
+    final int STICK_WIDTH = 7;
+    final int STICK_HEIGHT = 50;
+    
+    
+    //posicion de las imagenes de fondo
+     
+    Image img = new Image(getClass().getResourceAsStream("/imagenes/estrellas.jpeg"));
+    Image img2 = new Image(getClass().getResourceAsStream("/imagenes/estrellas2.jpeg"));
 
     @Override
     public void start(Stage stage) {
@@ -29,10 +52,40 @@ public class App extends Application {
         stage.show();
         
         //introduccion de la imagen de fondo
-        Image img = new Image(getClass().getResourceAsStream("/imagenes/estrellas.jpeg"));
         ImageView imgView = new ImageView(img);
         root.getChildren().add(imgView);
-
+        
+        ImageView imgView2 = new ImageView(img2);
+        root.getChildren().add(imgView2);
+        
+        ///movimiento de la imagen de fondo
+          
+        Timeline animationespacio = new Timeline(
+            new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
+                //System.out.println(desiertoX);
+                imgView.setY(imagenY);
+                imagenY -= 5;
+               
+                //System.out.println(desiertoX2);
+                imgView2.setY(imagen2Y);
+                imagen2Y -= 5;
+               
+                if (imagenY < -685) {
+                imagenY = 680;
+                }
+               
+                if (imagen2Y < -685) {
+                imagen2Y = 680;
+                }
+               
+            })
+        );
+        animationespacio.setCycleCount(Timeline.INDEFINITE);
+        animationespacio.play();
+        
+        
+        //////creacion de la nave///////
+        
         //pico de la nave
         Polyline cabeza = new Polyline();
         cabeza.getPoints().addAll(new Double[]{
@@ -101,6 +154,37 @@ public class App extends Application {
         //desplazar figuras
         groupPersonaje.setLayoutX(posX);
         groupPersonaje.setLayoutY(posY);
+        
+        //movimiento de la nave///
+        //suma de la posicion X y velocidad
+        
+        posY += velocidad;
+            if(posY < 0) {
+                posY = 0;
+            } else {
+                if(posY > SCENE_TAM_Y - STICK_HEIGHT) {
+                    posY = SCENE_TAM_Y - STICK_HEIGHT;
+                }
+            }
+        
+        
+        
+        ///
+        scene.setOnKeyPressed((KeyEvent event) -> {
+        switch(event.getCode()) {    
+            case LEFT:
+                posX -= velocidad;
+                groupPersonaje.setLayoutX(posX);
+                break;
+            case RIGHT:
+                posX += velocidad;
+                groupPersonaje.setLayoutX(posX);
+                break;
+        }
+        });
+ 
+        //
+        
     }
 
     public static void main(String[] args) {
