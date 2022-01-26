@@ -1,5 +1,6 @@
 package es.cristiangg.proyectojuego;
 
+import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -14,7 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -42,21 +42,21 @@ public class App extends Application {
     Image img = new Image(getClass().getResourceAsStream("/imagenes/estrellas.jpeg"));
     Image img2 = new Image(getClass().getResourceAsStream("/imagenes/estrellas2.jpeg"));
     
-    //imagenes de marciano lila
-    Image marciano = new Image(getClass().getResourceAsStream("/imagenes/marcianolila.jpg"));
-    ImageView imageView1 = new ImageView();
+    //imagenes de marciano 1
+    Image marciano = new Image(getClass().getResourceAsStream("/imagenes/verde.png"));
+    ImageView imageView1 = new ImageView(marciano);
     
-    // imagen de marciano rojo
-    Image marciano1 = new Image(getClass().getResourceAsStream("/imagenes/marcianorojo.jpg"));
-    ImageView imageView2 = new ImageView();
+//     imagen de marciano 2
+    Image marciano1 = new Image(getClass().getResourceAsStream("/imagenes/verde.png"));
+    ImageView imageView2 = new ImageView(marciano1);
     
-    // imagen marciano verde
-    Image marciano2 = new Image(getClass().getResourceAsStream("/imagenes/marcianoverde.jpg"));
-    ImageView imageView3 = new ImageView();
+    // imagen marciano 3
+    Image marciano2 = new Image(getClass().getResourceAsStream("/imagenes/verde.png"));
+    ImageView imageView3 = new ImageView(marciano2);
     
-//    // imagen marciano verde claro
-    Image marciano3 = new Image(getClass().getResourceAsStream("/imagenes/marcianoverdeclaro.png"));
-    ImageView imageView4 = new ImageView();
+    // imagen marciano 4
+    Image marciano3 = new Image(getClass().getResourceAsStream("/imagenes/verde.png"));
+    ImageView imageView4 = new ImageView(marciano3);
 
     @Override  
     public void start(Stage stage) {
@@ -68,61 +68,62 @@ public class App extends Application {
         stage.show();
       
        
-//        // Ejemplo de asignar una posición aleatoria 1
-//        Random random = new Random();
-//        int posX = random.nextInt(640);
-//        zona1.setLayoutX(posX);
-//        int posY = random.nextInt(480);
-//        zona1.setLayoutY(posY);
- 
         // Parte del código para detectar la colisión de los rectángulos
         //Shape zonaColision = Shape.intersect(zona1, zona2, zona3, zona4);
         
         
         //introduccion de la imagen de fondo
         ImageView imgView = new ImageView(img);
-        //root.getChildren().add(imgView);
+        root.getChildren().add(imgView);
         
         ImageView imgView2 = new ImageView(img2);
-        //root.getChildren().add(imgView2);
+        root.getChildren().add(imgView2);
         
-         //marciano lila
+         //marciano 1
         Rectangle zona1 = new Rectangle(20, 20);
         Group grupo1 = new Group();
         grupo1.getChildren().addAll(imageView1, zona1);
-        root.getChildren().add(imgView);
+        root.getChildren().add(grupo1);
         zona1.setVisible(false);
-        grupo1.setLayoutX(100);
-        grupo1.setLayoutY(100);
+        grupo1.setLayoutX(50);
+        grupo1.setLayoutY(50);
+        imageView1.setScaleY(0.15);
+        imageView1.setScaleX(0.15);
+        
 
-
-        // marciano rojo
+//         marciano 2
         Rectangle zona2 = new Rectangle(20, 20);
         Group grupo2 = new Group();
         grupo2.getChildren().addAll(imageView2, zona2);
-        root.getChildren().add(imageView2);
+        root.getChildren().add(grupo2);
         zona2.setVisible(false);
-        grupo2.setLayoutX(130);
-        grupo2.setLayoutY(130);
+        grupo2.setLayoutX(100);
+        grupo2.setLayoutY(50);
+        imageView2.setScaleY(0.15);
+        imageView2.setScaleX(0.15);
         
-        // marciano verde
+//        // marciano 3
         Rectangle zona3 = new Rectangle(20, 20);
         Group grupo3 = new Group();
         grupo3.getChildren().addAll(imageView3, zona3);
-        root.getChildren().add(imageView3);
+        root.getChildren().add(grupo3);
         zona3.setVisible(false);
-        grupo3.setLayoutX(170);
-        grupo3.setLayoutY(170);
+        grupo3.setLayoutX(150);
+        grupo3.setLayoutY(50);
+        imageView3.setScaleY(0.15);
+        imageView3.setScaleX(0.15);
         
-//        //marciano verde claro
+////        //marciano 4
         Rectangle zona4 = new Rectangle(20, 20);
         Group grupo4 = new Group();
         grupo4.getChildren().addAll(imageView4, zona4);
         root.getChildren().add(grupo4);
-        //zona4.setVisible(false);
+        zona4.setVisible(false);
         grupo4.setLayoutX(200);
-        grupo4.setLayoutY(200);
-//        
+        grupo4.setLayoutY(50);
+        imageView4.setScaleY(0.15);
+        imageView4.setScaleX(0.15);
+        
 
         //////creacion de la nave///////
                
@@ -208,19 +209,19 @@ public class App extends Application {
         Timeline animationespacio = new Timeline(
                 
             new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
-                //System.out.println(desiertoX);
+                //System.out.println(espacioX);
                 imgView.setY(imagenY);
-                imagenY -= 5;
-               
-                //System.out.println(desiertoX2);
+                imagenY = 0;
+//               
+                //System.out.println(espacioX2);
                 imgView2.setY(imagen2Y);
-                imagen2Y -= 5;
+                imagen2Y = 5;
                
-                if (imagenY < -685) {
+                if (imagenY < 0) {
                 imagenY = 680;
                 }
                
-                if (imagen2Y < -685) {
+                if (imagen2Y < 685) {
                 imagen2Y = 680;
                 }
                 //desplazar figuras
@@ -230,8 +231,8 @@ public class App extends Application {
                 //suma de la posicion X y velocidad de la nave
         
                 posX += velocidad;
-                    if(posX < 0) {
-                        posX = 0;
+                    if(posX < 50) {
+                        posX = 50;
                     } else {
                         if(posX > SCENE_TAM_X - STICK_HEIGHT) {
                             posX = SCENE_TAM_X - STICK_HEIGHT;
