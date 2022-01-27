@@ -1,6 +1,5 @@
 package es.cristiangg.proyectojuego;
 
-import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -28,8 +27,17 @@ public class App extends Application {
     //movimiento nave
     int velocidad = 0;
     
+    //movimiento marciano
+    int marciano1X = 50;
+    int marciano2X = 100;   
+    int marciano3X = 150;
+    int marciano4X = 200;
+    
+    int movimientoMarciano1X = 2;
+    
+    //imagenes de fondo
     int imagenY= 0;
-    int imagen2Y =689;
+    int imagen2Y = -689;
     
     //dimensiones de pantalla
     final int SCENE_TAM_X = 460;
@@ -66,10 +74,6 @@ public class App extends Application {
         var scene = new Scene(root, 460, 689);
         stage.setScene(scene);
         stage.show();
-      
-       
-        // Parte del código para detectar la colisión de los rectángulos
-        //Shape zonaColision = Shape.intersect(zona1, zona2, zona3, zona4);
         
         
         //introduccion de la imagen de fondo
@@ -85,10 +89,12 @@ public class App extends Application {
         grupo1.getChildren().addAll(imageView1, zona1);
         root.getChildren().add(grupo1);
         zona1.setVisible(false);
-        grupo1.setLayoutX(50);
         grupo1.setLayoutY(50);
         imageView1.setScaleY(0.15);
         imageView1.setScaleX(0.15);
+        
+
+
         
 
 //         marciano 2
@@ -97,33 +103,31 @@ public class App extends Application {
         grupo2.getChildren().addAll(imageView2, zona2);
         root.getChildren().add(grupo2);
         zona2.setVisible(false);
-        grupo2.setLayoutX(100);
         grupo2.setLayoutY(50);
         imageView2.setScaleY(0.15);
         imageView2.setScaleX(0.15);
         
-//        // marciano 3
+       // marciano 3
         Rectangle zona3 = new Rectangle(20, 20);
         Group grupo3 = new Group();
         grupo3.getChildren().addAll(imageView3, zona3);
         root.getChildren().add(grupo3);
         zona3.setVisible(false);
-        grupo3.setLayoutX(150);
         grupo3.setLayoutY(50);
         imageView3.setScaleY(0.15);
         imageView3.setScaleX(0.15);
         
-////        //marciano 4
+        //marciano 4
         Rectangle zona4 = new Rectangle(20, 20);
         Group grupo4 = new Group();
         grupo4.getChildren().addAll(imageView4, zona4);
         root.getChildren().add(grupo4);
         zona4.setVisible(false);
-        grupo4.setLayoutX(200);
         grupo4.setLayoutY(50);
         imageView4.setScaleY(0.15);
         imageView4.setScaleX(0.15);
         
+      
 
         //////creacion de la nave///////
                
@@ -209,20 +213,20 @@ public class App extends Application {
         Timeline animationespacio = new Timeline(
                 
             new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
-                //System.out.println(espacioX);
+                System.out.println("primera imagen " + imagenY);
                 imgView.setY(imagenY);
-                imagenY = 0;
+                imagenY += 5;
 //               
-                //System.out.println(espacioX2);
+                System.out.println("segunda imagen " + imagenY);
                 imgView2.setY(imagen2Y);
-                imagen2Y = 5;
+                imagen2Y += 5;
                
-                if (imagenY < 0) {
-                imagenY = 680;
+                if (imagenY > 680) {
+                imagenY = -675;
                 }
                
-                if (imagen2Y < 685) {
-                imagen2Y = 680;
+                if (imagen2Y > 680) {
+                imagen2Y = -675;
                 }
                 //desplazar figuras
                 groupPersonaje.setLayoutX(posX);
@@ -238,6 +242,45 @@ public class App extends Application {
                             posX = SCENE_TAM_X - STICK_HEIGHT;
                         }
                     }
+            //movimiento marciano1
+            grupo1.setLayoutX(marciano1X);
+            marciano1X += movimientoMarciano1X;
+            if(marciano1X >= 150) {
+                movimientoMarciano1X = -3;
+            }
+            if(marciano1X <= -600) {
+                movimientoMarciano1X = 3;
+            }
+            
+            //marciano 2
+            grupo2.setLayoutX(marciano2X);
+            marciano2X += movimientoMarciano1X;
+            if(marciano2X >= 680) {
+                movimientoMarciano1X = -3;
+            }
+            if(marciano2X <=0) {
+                movimientoMarciano1X = 3;
+            }
+            
+            //marciano 3
+            grupo3.setLayoutX(marciano3X);
+            marciano3X += movimientoMarciano1X;
+            if(marciano3X >= 680) {
+                movimientoMarciano1X = -3;
+            }
+            if(marciano3X <=0) {
+                movimientoMarciano1X = 3;
+            }
+            
+            //marciano 4
+            grupo4.setLayoutX(marciano4X);
+            marciano4X += movimientoMarciano1X;
+            if(marciano4X >= 680) {
+                movimientoMarciano1X = -3;
+            }
+            if(marciano4X <=0) {
+                movimientoMarciano1X = 3;
+            }
             })
         );
 
