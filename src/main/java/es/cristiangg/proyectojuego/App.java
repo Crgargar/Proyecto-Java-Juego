@@ -70,6 +70,10 @@ public class App extends Application {
     //imagen marciano 4
     Image marciano3 = new Image(getClass().getResourceAsStream("/imagenes/verde.png"));
     ImageView imageView4 = new ImageView(marciano3);
+    
+    //meteorito
+    Image meteorito1 = new Image(getClass().getResourceAsStream("/imagenes/meteorito.jpg"));
+    ImageView imageView5 = new ImageView(meteorito1);
 
     @Override  
     public void start(Stage stage) {
@@ -189,6 +193,17 @@ public class App extends Application {
         disparo.setY(-8);
         disparo.setFill(Color.RED);
         
+        //meteorito
+        Circle meteorito = new Circle (0,40,7);
+        Group meteorito1 = new Group();
+        meteorito1.getChildren().addAll(imageView4, meteorito);
+        root.getChildren().add(meteorito1);
+        meteorito.setVisible(false);
+        meteorito1.setLayoutY(50);
+        imageView4.setScaleY(0.15);
+        imageView4.setScaleX(0.15);
+             
+        
         //agrupar las partes de la nave
         Group groupPersonaje = new Group();
         groupPersonaje.getChildren().add(cabeza);
@@ -243,25 +258,22 @@ public class App extends Application {
         
                 //suma de la posicion X y velocidad de la nave
                 posX += velocidad;
-                    if(posX < 50) {
+                    if(posX < 50) {        
                         posX = 50;
                     } else {
                         if(posX > SCENE_TAM_X - STICK_HEIGHT) {
                             posX = SCENE_TAM_X - STICK_HEIGHT;
                         }
-                disparo += disparonave;
-                    if(posY < 50) {
-                        posY = 50;
-                    } else {
-                        if(posY > SCENE_TAM_Y - STICK_HEIGHT) {
-                            posY = SCENE_TAM_Y - STICK_HEIGHT;
-                        } 
+//                posY -= disparonave;
+//                    if(disparonave < 20) {
+//                        disparonave = 20;
+//                    } else {
+//                        if(posY > SCENE_TAM_Y - STICK_HEIGHT) {
+//                            posY = SCENE_TAM_Y - STICK_HEIGHT;
+//                        } 
+//                    }
                     }
-                    }
-                    
-            //disparo de la nave
-            
-                    
+                   
             //movimiento marciano1
             grupo1.setLayoutX(marciano1X);
             marciano1X += movimientoMarciano1X;
@@ -285,6 +297,8 @@ public class App extends Application {
             marciano4X += movimientoMarciano1X;
             })
         );
+        
+        //objetos aleatorios
 
         animationespacio.setCycleCount(Timeline.INDEFINITE);
         animationespacio.play();
