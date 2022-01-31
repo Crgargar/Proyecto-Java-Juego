@@ -8,6 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -33,7 +34,8 @@ public class App extends Application {
     int marciano3X = 150;
     int marciano4X = 200;
     
-    int movimientoMarciano1X = 2;
+    // rebotes marciano
+    int movimientoMarciano1X = 3;
     
     //imagenes de fondo
     int imagenY= 0;
@@ -45,6 +47,9 @@ public class App extends Application {
     final int STICK_WIDTH = 7;
     final int STICK_HEIGHT = 50;
     
+    //velocidad disparo
+    int disparonave= 0;
+    Rectangle disparo = new Rectangle ();
     
     //posicion de las imagenes de fondo
     Image img = new Image(getClass().getResourceAsStream("/imagenes/estrellas.jpeg"));
@@ -54,15 +59,15 @@ public class App extends Application {
     Image marciano = new Image(getClass().getResourceAsStream("/imagenes/verde.png"));
     ImageView imageView1 = new ImageView(marciano);
     
-//     imagen de marciano 2
+    //imagen de marciano 2
     Image marciano1 = new Image(getClass().getResourceAsStream("/imagenes/verde.png"));
     ImageView imageView2 = new ImageView(marciano1);
     
-    // imagen marciano 3
+    //imagen marciano 3
     Image marciano2 = new Image(getClass().getResourceAsStream("/imagenes/verde.png"));
     ImageView imageView3 = new ImageView(marciano2);
     
-    // imagen marciano 4
+    //imagen marciano 4
     Image marciano3 = new Image(getClass().getResourceAsStream("/imagenes/verde.png"));
     ImageView imageView4 = new ImageView(marciano3);
 
@@ -75,7 +80,6 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
         
-        
         //introduccion de la imagen de fondo
         ImageView imgView = new ImageView(img);
         root.getChildren().add(imgView);
@@ -83,7 +87,7 @@ public class App extends Application {
         ImageView imgView2 = new ImageView(img2);
         root.getChildren().add(imgView2);
         
-         //marciano 1
+        //marciano 1
         Rectangle zona1 = new Rectangle(20, 20);
         Group grupo1 = new Group();
         grupo1.getChildren().addAll(imageView1, zona1);
@@ -93,11 +97,7 @@ public class App extends Application {
         imageView1.setScaleY(0.15);
         imageView1.setScaleX(0.15);
         
-
-
-        
-
-//         marciano 2
+        //marciano 2
         Rectangle zona2 = new Rectangle(20, 20);
         Group grupo2 = new Group();
         grupo2.getChildren().addAll(imageView2, zona2);
@@ -126,9 +126,7 @@ public class App extends Application {
         grupo4.setLayoutY(50);
         imageView4.setScaleY(0.15);
         imageView4.setScaleX(0.15);
-        
-      
-
+    
         //////creacion de la nave///////
                
         //pico de la nave
@@ -163,7 +161,6 @@ public class App extends Application {
         cuerpo.setY(20);
         cuerpo.setFill(Color.GREEN);
 
-        
         //circulo de la ventana de la nave
         Circle circleBall = new Circle (0,40,7);
         circleBall.setFill(Color.BLUE);
@@ -185,6 +182,13 @@ public class App extends Application {
             -10.0, 100.0 });
         fuegoi.setFill(Color.RED);
         
+        //disparo nave
+        disparo.setWidth(5);
+        disparo.setHeight(10);
+        disparo.setX(-2);
+        disparo.setY(-8);
+        disparo.setFill(Color.RED);
+        
         //agrupar las partes de la nave
         Group groupPersonaje = new Group();
         groupPersonaje.getChildren().add(cabeza);
@@ -194,6 +198,7 @@ public class App extends Application {
         groupPersonaje.getChildren().add(circleBall);
         groupPersonaje.getChildren().add(fuegod);
         groupPersonaje.getChildren().add(fuegoi);
+        groupPersonaje.getChildren().add(disparo);
         root.getChildren().add(groupPersonaje);
              
         /// movimiento del teclado
@@ -205,10 +210,13 @@ public class App extends Application {
             case RIGHT:
                 velocidad = 5;
                 break;
+            case SPACE:
+                disparonave -= 5;
+                disparo.setY(disparonave);
         }
         });
 
-        ///movimiento de la imagen de fondo
+        //movimiento de la imagen de fondo
                   
         Timeline animationespacio = new Timeline(
                 
@@ -216,7 +224,7 @@ public class App extends Application {
                 System.out.println("primera imagen " + imagenY);
                 imgView.setY(imagenY);
                 imagenY += 5;
-//               
+               
                 System.out.println("segunda imagen " + imagenY);
                 imgView2.setY(imagen2Y);
                 imagen2Y += 5;
@@ -228,12 +236,12 @@ public class App extends Application {
                 if (imagen2Y > 680) {
                 imagen2Y = -675;
                 }
+                
                 //desplazar figuras
                 groupPersonaje.setLayoutX(posX);
                 groupPersonaje.setLayoutY(posY);
         
                 //suma de la posicion X y velocidad de la nave
-        
                 posX += velocidad;
                     if(posX < 50) {
                         posX = 50;
@@ -241,53 +249,48 @@ public class App extends Application {
                         if(posX > SCENE_TAM_X - STICK_HEIGHT) {
                             posX = SCENE_TAM_X - STICK_HEIGHT;
                         }
+                disparo += disparonave;
+                    if(posY < 50) {
+                        posY = 50;
+                    } else {
+                        if(posY > SCENE_TAM_Y - STICK_HEIGHT) {
+                            posY = SCENE_TAM_Y - STICK_HEIGHT;
+                        } 
                     }
+                    }
+                    
+            //disparo de la nave
+            
+                    
             //movimiento marciano1
             grupo1.setLayoutX(marciano1X);
             marciano1X += movimientoMarciano1X;
-            if(marciano1X >= 150) {
+            if(marciano4X >= 300) {
                 movimientoMarciano1X = -3;
             }
-            if(marciano1X <= -600) {
+            if(marciano1X <= -120) {
                 movimientoMarciano1X = 3;
             }
             
-            //marciano 2
+//            marciano 2
             grupo2.setLayoutX(marciano2X);
             marciano2X += movimientoMarciano1X;
-            if(marciano2X >= 680) {
-                movimientoMarciano1X = -3;
-            }
-            if(marciano2X <=0) {
-                movimientoMarciano1X = 3;
-            }
-            
-            //marciano 3
+        
+//            marciano 3
             grupo3.setLayoutX(marciano3X);
             marciano3X += movimientoMarciano1X;
-            if(marciano3X >= 680) {
-                movimientoMarciano1X = -3;
-            }
-            if(marciano3X <=0) {
-                movimientoMarciano1X = 3;
-            }
-            
-            //marciano 4
+    
+//            marciano 4
             grupo4.setLayoutX(marciano4X);
             marciano4X += movimientoMarciano1X;
-            if(marciano4X >= 680) {
-                movimientoMarciano1X = -3;
-            }
-            if(marciano4X <=0) {
-                movimientoMarciano1X = 3;
-            }
             })
         );
 
         animationespacio.setCycleCount(Timeline.INDEFINITE);
         animationespacio.play();
-    }
 
+    }
+    
     public static void main(String[] args) {
         launch();
     }
