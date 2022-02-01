@@ -22,8 +22,12 @@ import javafx.util.Duration;
 public class App extends Application {
     
     //posiciones de la nave
-    double posX=230;
+    double posX=210;
     double posY =500;
+    
+    //posicion disparo
+    double posXdisparo= posX;
+    double posYdisparo=490;
     
     //movimiento nave
     int velocidad = 0;
@@ -48,8 +52,10 @@ public class App extends Application {
     final int STICK_HEIGHT = 50;
     
     //velocidad disparo
-    int disparonave= 0;
+    int velocidadisparo= 0;
     Rectangle disparo = new Rectangle ();
+
+
     
     //posicion de las imagenes de fondo
     Image img = new Image(getClass().getResourceAsStream("/imagenes/estrellas.jpeg"));
@@ -72,8 +78,8 @@ public class App extends Application {
     ImageView imageView4 = new ImageView(marciano3);
     
     //meteorito
-    Image meteorito1 = new Image(getClass().getResourceAsStream("/imagenes/meteorito.jpg"));
-    ImageView imageView5 = new ImageView(meteorito1);
+//    Image meteorito1 = new Image(getClass().getResourceAsStream("/imagenes/meteorito.jpg"));
+//    ImageView imageView5 = new ImageView(meteorito1);
 
     @Override  
     public void start(Stage stage) {
@@ -189,19 +195,19 @@ public class App extends Application {
         //disparo nave
         disparo.setWidth(5);
         disparo.setHeight(10);
-        disparo.setX(-2);
-        disparo.setY(-8);
-        disparo.setFill(Color.RED);
+        disparo.setFill(Color.BLUE);
+        root.getChildren().add(disparo);
+
         
-        //meteorito
-        Circle meteorito = new Circle (0,40,7);
-        Group meteorito1 = new Group();
-        meteorito1.getChildren().addAll(imageView4, meteorito);
-        root.getChildren().add(meteorito1);
-        meteorito.setVisible(false);
-        meteorito1.setLayoutY(50);
-        imageView4.setScaleY(0.15);
-        imageView4.setScaleX(0.15);
+//        //meteorito
+//        Circle meteorito = new Circle (0,40,7);
+//        Group meteorito1 = new Group();
+//        meteorito1.getChildren().addAll(imageView4, meteorito);
+//        root.getChildren().add(meteorito1);
+//        meteorito.setVisible(false);
+//        meteorito1.setLayoutY(50);
+//        imageView4.setScaleY(0.15);
+//        imageView4.setScaleX(0.15);
              
         
         //agrupar las partes de la nave
@@ -213,7 +219,6 @@ public class App extends Application {
         groupPersonaje.getChildren().add(circleBall);
         groupPersonaje.getChildren().add(fuegod);
         groupPersonaje.getChildren().add(fuegoi);
-        groupPersonaje.getChildren().add(disparo);
         root.getChildren().add(groupPersonaje);
              
         /// movimiento del teclado
@@ -226,8 +231,7 @@ public class App extends Application {
                 velocidad = 5;
                 break;
             case SPACE:
-                disparonave -= 5;
-                disparo.setY(disparonave);
+                velocidadisparo -= 5;
         }
         });
 
@@ -236,11 +240,11 @@ public class App extends Application {
         Timeline animationespacio = new Timeline(
                 
             new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
-                System.out.println("primera imagen " + imagenY);
+//                System.out.println("primera imagen " + imagenY);
                 imgView.setY(imagenY);
                 imagenY += 5;
                
-                System.out.println("segunda imagen " + imagenY);
+//                System.out.println("segunda imagen " + imagenY);
                 imgView2.setY(imagen2Y);
                 imagen2Y += 5;
                
@@ -255,6 +259,11 @@ public class App extends Application {
                 //desplazar figuras
                 groupPersonaje.setLayoutX(posX);
                 groupPersonaje.setLayoutY(posY);
+                
+                //diparo nave
+                disparo.setX(posX);
+                disparo.setY(posYdisparo);
+
         
                 //suma de la posicion X y velocidad de la nave
                 posX += velocidad;
@@ -264,14 +273,17 @@ public class App extends Application {
                         if(posX > SCENE_TAM_X - STICK_HEIGHT) {
                             posX = SCENE_TAM_X - STICK_HEIGHT;
                         }
-//                posY -= disparonave;
-//                    if(disparonave < 20) {
-//                        disparonave = 20;
+                        
+                //velocidad disparo de la nave
+                posYdisparo -= velocidadisparo;
+                    if(velocidadisparo < 0) {
+                        velocidadisparo = 10;
+                        disparo.setLayoutY(velocidadisparo);
 //                    } else {
-//                        if(posY > SCENE_TAM_Y - STICK_HEIGHT) {
-//                            posY = SCENE_TAM_Y - STICK_HEIGHT;
+//                        if(posYdisparo > SCENE_TAM_Y - STICK_HEIGHT) {
+//                            posYdisparo = SCENE_TAM_Y - STICK_HEIGHT;
 //                        } 
-//                    }
+                    }
                     }
                    
             //movimiento marciano1
@@ -291,18 +303,23 @@ public class App extends Application {
 //            marciano 3
             grupo3.setLayoutX(marciano3X);
             marciano3X += movimientoMarciano1X;
-    
+                System.out.println(velocidadisparo);
+
 //            marciano 4
             grupo4.setLayoutX(marciano4X);
             marciano4X += movimientoMarciano1X;
+            
+            //volver disparo de la nave
+            if (posYdisparo < 5){
+                disparo.setLayoutY(490);
+                velocidadisparo = 0;
+            }
             })
+       
         );
-        
-        //objetos aleatorios
 
         animationespacio.setCycleCount(Timeline.INDEFINITE);
         animationespacio.play();
-
     }
     
     public static void main(String[] args) {
