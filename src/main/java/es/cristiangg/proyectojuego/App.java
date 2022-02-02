@@ -1,5 +1,8 @@
 package es.cristiangg.proyectojuego;
 
+import static java.lang.Math.random;
+import static java.lang.StrictMath.random;
+import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -8,7 +11,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -54,8 +56,9 @@ public class App extends Application {
     //velocidad disparo
     int velocidadisparo= 0;
     Rectangle disparo = new Rectangle ();
-
-
+    
+    //movimiento meteorito
+    int moviMeteoritoY = 0;
     
     //posicion de las imagenes de fondo
     Image img = new Image(getClass().getResourceAsStream("/imagenes/estrellas.jpeg"));
@@ -77,13 +80,24 @@ public class App extends Application {
     Image marciano3 = new Image(getClass().getResourceAsStream("/imagenes/verde.png"));
     ImageView imageView4 = new ImageView(marciano3);
     
-    //meteorito
-//    Image meteorito1 = new Image(getClass().getResourceAsStream("/imagenes/meteorito.jpg"));
-//    ImageView imageView5 = new ImageView(meteorito1);
+    //meteorito1
+    Image meteorito = new Image(getClass().getResourceAsStream("/imagenes/meteorito.png"));
+    ImageView imageView5 = new ImageView(meteorito);
+    
+    //meteorito2
+    Image meteorito2 = new Image(getClass().getResourceAsStream("/imagenes/meteorito.png"));
+    ImageView imageView6 = new ImageView(meteorito2);
+
+    //variable random
+    Random random = new Random();
+
+            Group grupo5 = new Group();
+            Group grupo6 = new Group();
+
 
     @Override  
     public void start(Stage stage) {
-                               
+                    
         //dimensiones de la pantalla
         Pane root = new Pane();
         var scene = new Scene(root, 460, 689);
@@ -199,16 +213,27 @@ public class App extends Application {
         root.getChildren().add(disparo);
 
         
-//        //meteorito
-//        Circle meteorito = new Circle (0,40,7);
-//        Group meteorito1 = new Group();
-//        meteorito1.getChildren().addAll(imageView4, meteorito);
-//        root.getChildren().add(meteorito1);
-//        meteorito.setVisible(false);
-//        meteorito1.setLayoutY(50);
-//        imageView4.setScaleY(0.15);
-//        imageView4.setScaleX(0.15);
-             
+//        //meteorito1
+        Circle circlemeteorito = new Circle (0,40,7);
+        circlemeteorito.setFill(Color.RED);   
+        grupo5.getChildren().addAll(imageView5, circlemeteorito);
+        root.getChildren().add(grupo5);
+        //circlemeteorito.setVisible(false);
+        grupo5.setLayoutX(20);
+        imageView5.setScaleY(0.10);
+        imageView5.setScaleX(0.10);
+        
+        //meteorito2
+        Circle circlemeteorito2 = new Circle (0,40,7);
+        circlemeteorito2.setFill(Color.RED);   
+        imageView6.setScaleY(0.10);
+        imageView6.setScaleX(0.10);
+        circlemeteorito2.setVisible(false);
+        grupo6.getChildren().addAll(imageView6, circlemeteorito2);
+        grupo6.setLayoutX(100);
+        grupo6.setLayoutY(0);
+        root.getChildren().add(grupo6);
+
         
         //agrupar las partes de la nave
         Group groupPersonaje = new Group();
@@ -233,13 +258,14 @@ public class App extends Application {
             case SPACE:
                 velocidadisparo -= 5;
         }
+            
         });
 
         //movimiento de la imagen de fondo
                   
         Timeline animationespacio = new Timeline(
                 
-            new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
+            new KeyFrame(Duration.seconds(0.1), (ActionEvent ae) -> {
 //                System.out.println("primera imagen " + imagenY);
                 imgView.setY(imagenY);
                 imagenY += 5;
@@ -275,15 +301,15 @@ public class App extends Application {
                         }
                         
                 //velocidad disparo de la nave
-                posYdisparo -= velocidadisparo;
-                    if(velocidadisparo < 0) {
-                        velocidadisparo = 10;
-                        disparo.setLayoutY(velocidadisparo);
-//                    } else {
-//                        if(posYdisparo > SCENE_TAM_Y - STICK_HEIGHT) {
-//                            posYdisparo = SCENE_TAM_Y - STICK_HEIGHT;
-//                        } 
-                    }
+                if (velocidadisparo == -5){
+                    posYdisparo = posYdisparo -5;
+                }
+                
+                //volver disparo a la nave
+                if (posYdisparo == 0){
+                    posYdisparo = 490;
+                    velocidadisparo = 0;
+                }
                     }
                    
             //movimiento marciano1
@@ -296,26 +322,48 @@ public class App extends Application {
                 movimientoMarciano1X = 3;
             }
             
-//            marciano 2
+            //marciano 2
             grupo2.setLayoutX(marciano2X);
             marciano2X += movimientoMarciano1X;
         
-//            marciano 3
+            // marciano 3
             grupo3.setLayoutX(marciano3X);
             marciano3X += movimientoMarciano1X;
                 System.out.println(velocidadisparo);
 
-//            marciano 4
+            // marciano 4
             grupo4.setLayoutX(marciano4X);
             marciano4X += movimientoMarciano1X;
+
+            //caida meteorito1 
+            moviMeteoritoY +=5;
+            grupo5.setLayoutY(moviMeteoritoY);
+            System.out.println("Colocando meteorito 1 Y: "+moviMeteoritoY);
             
-            //volver disparo de la nave
-            if (posYdisparo < 5){
-                disparo.setLayoutY(490);
-                velocidadisparo = 0;
-            }
+            //caida meteorito2 
+            moviMeteoritoY +=5;
+            grupo6.setLayoutY(moviMeteoritoY);
+            
+            System.out.println("primera imagen " + grupo5.getLayoutY());
+
+
+            //aleatorio de meteorito1
+            if (moviMeteoritoY == 680) {
+                int valor = random.nextInt(5);
+                System.out.println("Colocando meteorito arriba");
+                moviMeteoritoY = 0;
+                grupo5.setLayoutY(moviMeteoritoY);
+                grupo5.setLayoutX (5 + valor );
+                };
+
+//            if (moviMeteoritoY == 400) {
+//                int valor = random.nextInt(100);
+//                grupo6.setLayoutY(moviMeteoritoY = 0);
+//                grupo6.setLayoutX (400 + valor );
+//                };
+
             })
-       
+
         );
 
         animationespacio.setCycleCount(Timeline.INDEFINITE);
