@@ -1,22 +1,25 @@
 package es.cristiangg.proyectojuego;
 
-import static java.lang.Math.random;
-import static java.lang.StrictMath.random;
 import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -59,6 +62,7 @@ public class App extends Application {
     
     //movimiento meteorito
     int moviMeteoritoY = 0;
+    int caidaMarcianoY = 0;
     
     //posicion de las imagenes de fondo
     Image img = new Image(getClass().getResourceAsStream("/imagenes/estrellas.jpeg"));
@@ -94,9 +98,11 @@ public class App extends Application {
             Group grupo5 = new Group();
             Group grupo6 = new Group();
 
-
+int vida=0;
     @Override  
     public void start(Stage stage) {
+        
+//////////////////////////////////Pantalla/////////////////////////////////////////////
                     
         //dimensiones de la pantalla
         Pane root = new Pane();
@@ -111,8 +117,65 @@ public class App extends Application {
         ImageView imgView2 = new ImageView(img2);
         root.getChildren().add(imgView2);
         
+//////////////////////Texto Pantalla/////////////////////////////////
+//
+//        HBox paneScores = new HBox();
+//        paneScores.setTranslateY(20);
+//        paneScores.setMinWidth(SCENE_TAM_X);
+//        paneScores.setAlignment(Pos.CENTER);
+//        paneScores.setSpacing(100);
+//        root.getChildren().add(paneScores);
+//        
+//        HBox paneCurrentScore = new HBox();
+//        paneCurrentScore.setSpacing(10);
+//        paneScores.getChildren().add(paneCurrentScore);
+//       
+//        HBox paneHighScore = new HBox();
+//        paneHighScore.setSpacing(10);
+//        paneScores.getChildren().add(paneHighScore);
+//       
+//        Text textTitleScore = new Text ("Score:");
+//        textTitleScore.setFont(Font.font(TEXT_SIZE));
+//        textTitleScore.setFill(Color.WHITE);
+//       
+//        textScore = new Text ("0");
+//        textScore.setFont(Font.font(TEXT_SIZE));
+//        textScore.setFill(Color.WHITE);
+//       
+//        Text textTitleHighScore = new Text ("Max.Score:");
+//        textTitleHighScore.setFont(Font.font(TEXT_SIZE));
+//        textTitleHighScore.setFill(Color.WHITE);
+//       
+//        Text textHighScore = new Text ("0");
+//        textHighScore.setFont(Font.font(TEXT_SIZE));
+//        textHighScore.setFill(Color.WHITE);
+//       
+//        paneCurrentScore.getChildren().add(textTitleScore);
+//        paneCurrentScore.getChildren().add(textScore);
+//        paneHighScore.getChildren().add(textTitleHighScore);
+//        paneHighScore.getChildren().add(textHighScore);
+//       
+//        resetGame();
+
+//////////////////////////////////Audio Juego///////////////////////////////
+//URL urlAudio = getClass().getResource("/audio/archivoAudio.mp3");
+//if(urlAudio != null) {
+//    try {
+//        AudioClip audioClip1 = new AudioClip(urlAudio.toURI().toString());
+//        audioClip1.play();
+//    } catch (URISyntaxException ex) {
+//        System.out.println("Error en el formato de ruta de archivo de audio");
+//    }            
+//} else {
+//    System.out.println("No se ha encontrado el archivo de audio");
+//}
+
+//////////////////////////////////////Marcianos////////////////////////////////////////////////
+        
         //marciano 1
-        Rectangle zona1 = new Rectangle(20, 20);
+        Rectangle zona1 = new Rectangle(35, 35);
+        zona1.setX(103);
+        zona1.setY(80);
         Group grupo1 = new Group();
         grupo1.getChildren().addAll(imageView1, zona1);
         root.getChildren().add(grupo1);
@@ -122,7 +185,9 @@ public class App extends Application {
         imageView1.setScaleX(0.15);
         
         //marciano 2
-        Rectangle zona2 = new Rectangle(20, 20);
+        Rectangle zona2 = new Rectangle(35, 35);
+        zona2.setX(105);
+        zona2.setY(80);
         Group grupo2 = new Group();
         grupo2.getChildren().addAll(imageView2, zona2);
         root.getChildren().add(grupo2);
@@ -132,7 +197,9 @@ public class App extends Application {
         imageView2.setScaleX(0.15);
         
        // marciano 3
-        Rectangle zona3 = new Rectangle(20, 20);
+        Rectangle zona3 = new Rectangle(35, 35);
+        zona3.setX(107);
+        zona3.setY(80);
         Group grupo3 = new Group();
         grupo3.getChildren().addAll(imageView3, zona3);
         root.getChildren().add(grupo3);
@@ -142,7 +209,9 @@ public class App extends Application {
         imageView3.setScaleX(0.15);
         
         //marciano 4
-        Rectangle zona4 = new Rectangle(20, 20);
+        Rectangle zona4 = new Rectangle(35, 35);
+        zona4.setX(109);
+        zona4.setY(80);
         Group grupo4 = new Group();
         grupo4.getChildren().addAll(imageView4, zona4);
         root.getChildren().add(grupo4);
@@ -151,7 +220,7 @@ public class App extends Application {
         imageView4.setScaleY(0.15);
         imageView4.setScaleX(0.15);
     
-        //////creacion de la nave///////
+/////////////////////////////creacion de la nave///////////////////////////////////////////
                
         //pico de la nave
         Polyline cabeza = new Polyline();
@@ -212,29 +281,6 @@ public class App extends Application {
         disparo.setFill(Color.BLUE);
         root.getChildren().add(disparo);
 
-        
-//        //meteorito1
-        Circle circlemeteorito = new Circle (0,40,7);
-        circlemeteorito.setFill(Color.RED);   
-        grupo5.getChildren().addAll(imageView5, circlemeteorito);
-        root.getChildren().add(grupo5);
-        //circlemeteorito.setVisible(false);
-        grupo5.setLayoutX(20);
-        imageView5.setScaleY(0.10);
-        imageView5.setScaleX(0.10);
-        
-        //meteorito2
-        Circle circlemeteorito2 = new Circle (0,40,7);
-        circlemeteorito2.setFill(Color.RED);   
-        imageView6.setScaleY(0.10);
-        imageView6.setScaleX(0.10);
-        circlemeteorito2.setVisible(false);
-        grupo6.getChildren().addAll(imageView6, circlemeteorito2);
-        grupo6.setLayoutX(100);
-        grupo6.setLayoutY(0);
-        root.getChildren().add(grupo6);
-
-        
         //agrupar las partes de la nave
         Group groupPersonaje = new Group();
         groupPersonaje.getChildren().add(cabeza);
@@ -245,7 +291,35 @@ public class App extends Application {
         groupPersonaje.getChildren().add(fuegod);
         groupPersonaje.getChildren().add(fuegoi);
         root.getChildren().add(groupPersonaje);
+        
+///////////////////////////////Meteoritos///////////////////////////////////////////////
+        
+//        //meteorito1
+        Circle circlemeteorito = new Circle (0,0,12);
+        circlemeteorito.setLayoutX(50);
+        circlemeteorito.setLayoutY(10);
+        circlemeteorito.setFill(Color.RED);   
+        grupo5.getChildren().addAll(imageView5, circlemeteorito);
+        root.getChildren().add(grupo5);
+//        circlemeteorito.setVisible(false);
+        imageView5.setLayoutX(-100);
+        imageView5.setLayoutY(-120);
+        imageView5.setScaleY(0.10);
+        imageView5.setScaleX(0.10);
+        
+//        //meteorito2
+//        Circle circlemeteorito2 = new Circle (0,40,7);
+//        circlemeteorito2.setFill(Color.RED);   
+//        imageView6.setScaleY(0.10);
+//        imageView6.setScaleX(0.10);
+//        circlemeteorito2.setVisible(false);
+//        grupo6.getChildren().addAll(imageView6, circlemeteorito2);
+//        grupo6.setLayoutX(100);
+//        grupo6.setLayoutY(0);
+//        root.getChildren().add(grupo6);
              
+//////////////////////////////////////Movimiento teclado//////////////////////////////////
+
         /// movimiento del teclado
         scene.setOnKeyPressed((KeyEvent event) -> {
         switch(event.getCode()) {    
@@ -261,11 +335,11 @@ public class App extends Application {
             
         });
 
-        //movimiento de la imagen de fondo
-                  
         Timeline animationespacio = new Timeline(
                 
-            new KeyFrame(Duration.seconds(0.1), (ActionEvent ae) -> {
+//////////////////////////movimiento de la imagen de fondo///////////////////////////
+
+            new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
 //                System.out.println("primera imagen " + imagenY);
                 imgView.setY(imagenY);
                 imagenY += 5;
@@ -282,7 +356,7 @@ public class App extends Application {
                 imagen2Y = -675;
                 }
                 
-                //desplazar figuras
+///////////////////desplazar figuras
                 groupPersonaje.setLayoutX(posX);
                 groupPersonaje.setLayoutY(posY);
                 
@@ -291,7 +365,7 @@ public class App extends Application {
                 disparo.setY(posYdisparo);
 
         
-                //suma de la posicion X y velocidad de la nave
+/////////////////suma de la posicion X y velocidad de la nave
                 posX += velocidad;
                     if(posX < 50) {        
                         posX = 50;
@@ -300,7 +374,7 @@ public class App extends Application {
                             posX = SCENE_TAM_X - STICK_HEIGHT;
                         }
                         
-                //velocidad disparo de la nave
+/////////////////////velocidad disparo de la nave
                 if (velocidadisparo == -5){
                     posYdisparo = posYdisparo -5;
                 }
@@ -312,7 +386,9 @@ public class App extends Application {
                 }
                     }
                    
-            //movimiento marciano1
+///////////////////////////Movimiento marcianos////////////////////////////////
+
+////////////////movimiento marciano1
             grupo1.setLayoutX(marciano1X);
             marciano1X += movimientoMarciano1X;
             if(marciano4X >= 300) {
@@ -322,32 +398,81 @@ public class App extends Application {
                 movimientoMarciano1X = 3;
             }
             
-            //marciano 2
+///////////////////marciano 2
             grupo2.setLayoutX(marciano2X);
             marciano2X += movimientoMarciano1X;
         
-            // marciano 3
+////////////////// marciano 3
             grupo3.setLayoutX(marciano3X);
             marciano3X += movimientoMarciano1X;
                 System.out.println(velocidadisparo);
 
-            // marciano 4
+///////////////////// marciano 4
             grupo4.setLayoutX(marciano4X);
             marciano4X += movimientoMarciano1X;
+            
+//////////////////////////////////Colision marcianos///////////////////////////
 
-            //caida meteorito1 
+            Shape.intersect(zona1, disparo);
+                Shape Colision1 = Shape.intersect(zona1, disparo);
+                boolean colisionPrimera = Colision1.getBoundsInLocal().isEmpty();
+                 if (colisionPrimera == false) {
+                    caidaMarcianoY +=5;
+                    grupo1.setLayoutY(caidaMarcianoY);
+//            System.out.println("Colocando meteorito 1 Y: "+caidaMarcianoY);
+//                    grupo1.setLayoutY(caidaMarcianoY);
+//                    grupo1.setLayoutX(500);
+                 }
+            Shape.intersect(zona2, disparo);
+                Shape Colision2 = Shape.intersect(zona2, disparo);
+                boolean colisionSegunda = Colision2.getBoundsInLocal().isEmpty();
+                 if (colisionSegunda == false) {
+                    vida++;
+//                    disparo.setX(posX);
+//                    disparo.setY(posYdisparo);
+                    if (vida == 1000);
+                    grupo2.setLayoutY(-5000);
+                    grupo2.setLayoutX(-5000);
+                 }
+            Shape.intersect(zona3, disparo);
+                Shape Colision3 = Shape.intersect(zona3, disparo);
+                boolean colisionTercera = Colision3.getBoundsInLocal().isEmpty();
+                 if (colisionTercera == false) {
+                    vida++;
+//                    disparo.setX(posX);
+//                    disparo.setY(posYdisparo);
+                    if (vida == 1000);
+                    grupo3.setLayoutY(-5000);
+                    grupo3.setLayoutX(-5000);
+                 }
+            Shape.intersect(zona4, disparo);
+                Shape Colision4 = Shape.intersect(zona4, disparo);
+                boolean colisionCuarta = Colision4.getBoundsInLocal().isEmpty();
+                 if (colisionCuarta == false) {
+                    vida++;
+//                    disparo.setX(posX);
+//                    disparo.setY(posYdisparo);
+                    if (vida == 1000);
+                    grupo4.setLayoutY(-5000);
+                    grupo4.setLayoutX(-5000);
+                 }
+                 
+                 
+//////////////////Movimientos de meteorito//////////////////////////////////
+//
+
+//            caida meteorito1 
             moviMeteoritoY +=5;
             grupo5.setLayoutY(moviMeteoritoY);
             System.out.println("Colocando meteorito 1 Y: "+moviMeteoritoY);
-            
-            //caida meteorito2 
-            moviMeteoritoY +=5;
-            grupo6.setLayoutY(moviMeteoritoY);
-            
-            System.out.println("primera imagen " + grupo5.getLayoutY());
-
-
-            //aleatorio de meteorito1
+//            
+//            //caida meteorito2 
+//            moviMeteoritoY +=5;
+//            grupo6.setLayoutY(moviMeteoritoY);
+//            
+//            System.out.println("primera imagen " + grupo5.getLayoutY());
+//
+//
             if (moviMeteoritoY == 680) {
                 int valor = random.nextInt(5);
                 System.out.println("Colocando meteorito arriba");
@@ -355,12 +480,14 @@ public class App extends Application {
                 grupo5.setLayoutY(moviMeteoritoY);
                 grupo5.setLayoutX (5 + valor );
                 };
-
+//
 //            if (moviMeteoritoY == 400) {
 //                int valor = random.nextInt(100);
 //                grupo6.setLayoutY(moviMeteoritoY = 0);
 //                grupo6.setLayoutX (400 + valor );
 //                };
+
+
 
             })
 
